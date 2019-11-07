@@ -13,6 +13,7 @@ defmodule ReceiptVerifier.IAPReceipt do
           original_purchase_date: DateTime.t(),
           is_trial_period: boolean(),
           is_in_intro_offer_period: boolean(),
+          cancellation_date: DateTime.t(),
           expires_date: DateTime.t()
         }
 
@@ -26,6 +27,7 @@ defmodule ReceiptVerifier.IAPReceipt do
     :original_purchase_date,
     :is_trial_period,
     :is_in_intro_offer_period,
+    :cancellation_date,
     :expires_date
   ]
 
@@ -86,6 +88,10 @@ defmodule ReceiptVerifier.IAPReceipt do
 
   defp do_parse_field({"expires_date_pst", _value}) do
     {:skip, nil}
+  end
+
+  defp do_parse_field({"cancellation_date_ms", value}) do
+    {:cancellation_date, format_datetime(value)}
   end
 
   defp do_parse_field({field, value}) do
